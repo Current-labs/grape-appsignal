@@ -16,8 +16,13 @@ module Appsignal
           raw_payload(env)
         ) do |payload|
           begin
-            @app.call(env)
+            @app.call(env).tap do |response|
+              payload[:response_status] = response[0]
+            end
           ensure
+            payload[:params] = env["api.endpoint"].params.to_hash
+            payload[:params].delete("route_info")
+            payload[:params].delete("format")
             payload[:action] = "#{payload[:method]} #{env['api.endpoint'].prepare_path('')}"
           end
         end
@@ -27,8 +32,6 @@ module Appsignal
         request = @options.fetch(:request_class, ::Grape::Request).new(env)
         params = request.public_send(@options.fetch(:params_method, :params))
         {
-          :params  => params.except(:route_info).to_hash,
-          :session => request.session.to_hash,
           :method  => request.request_method,
           :path    => request.path
         }
