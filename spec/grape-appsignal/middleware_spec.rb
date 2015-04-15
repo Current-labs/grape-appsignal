@@ -31,7 +31,7 @@ describe Appsignal::Grape::Middleware do
           params: {
             'id' => '1337'
           },
-          session: {},
+          response_status: 200,
           method: 'GET',
           path: '/hello/1337',
           action: 'GET /hello/:id(.:format)'
@@ -72,7 +72,7 @@ describe Appsignal::Grape::Middleware do
           params: {
             'name' => 'mark'
           },
-          session: {},
+          response_status: 200,
           method: 'GET',
           path: '/api/v1/hello/name/mark',
           action: 'GET /api/:version/hello(.:format)'
@@ -110,7 +110,7 @@ describe Appsignal::Grape::Middleware do
         expect(subject.payload ).to eq(
           {
             params: {},
-            session: {},
+            response_status: 200,
             method: 'GET',
             path: '/api/v1/hello/goodbye',
             action: 'GET /api/:version/hello(.:format)'
@@ -138,7 +138,7 @@ describe Appsignal::Grape::Middleware do
         expect(subject.payload ).to eq(
           {
             params: {},
-            session: {},
+            response_status: 200,
             method: 'GET',
             path: '/api/nested/v1/stuff',
             action: 'GET /api/nested/:version/stuff(.:format)'
