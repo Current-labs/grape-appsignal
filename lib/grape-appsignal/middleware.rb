@@ -17,7 +17,7 @@ module Appsignal
         ) do |payload|
           begin
             @app.call(env).tap do |response|
-              payload[:response_status] = response[0]
+              payload[:response_status] = response.status
             end
           ensure
             payload[:params] = env["api.endpoint"].params.to_hash
